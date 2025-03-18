@@ -5,21 +5,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "eventdb";
-    private static final int DB_VERSION = 6;
+    private static final int DB_VERSION = 8;
     private static final String TABLE_NAME = "myevents";
     private static final String ID_COL = "id";
     private static final String NAME_COL = "name";
     private static final String NOTE_COL = "note";
     private static final String DATE_COL = "datetime";
     private static final String TIME_COL = "time";
+    private static final String YEAR_COL = "year";
+    private static final String MONTH_COL = "month";
+    private static final String DAY_COL = "day";
     private static final String NOTIFICATION_COL = "notification";
+
 
     public DBHandler(Context context){
         super(context, DB_NAME, null, DB_VERSION);
@@ -33,12 +39,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 + NOTE_COL + " TEXT,"
                 + DATE_COL + " TEXT,"
                 + TIME_COL + " TEXT,"
+                + YEAR_COL + " INTEGER,"
+                + MONTH_COL + " INTEGER,"
+                + DAY_COL + " INTEGER,"
                 + NOTIFICATION_COL + " INTEGER DEFAULT 0)";
 
         db.execSQL(query);
     }
 
-    public void addNewEvent(String eventName, String eventNote, String date, String time, boolean notification){
+    public void addNewEvent(String eventName, String eventNote, String date, String time, int year, int month, int day, boolean notification){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -46,6 +55,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(NOTE_COL, eventNote);
         values.put(DATE_COL, date);
         values.put(TIME_COL, time);
+        values.put(YEAR_COL, year);
+        values.put(MONTH_COL, month);
+        values.put(DAY_COL, day);
         values.put(NOTIFICATION_COL, notification ? 1 : 0);
 
         db.insert(TABLE_NAME, null, values);
@@ -53,7 +65,14 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public ArrayList<EventModel> readEvents() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
         SQLiteDatabase db = this.getReadableDatabase();
+        //Cursor cursorEvents = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + DAY_COL + " = " + day + " ORDER BY " + DATE_COL + ", " + TIME_COL, null);
+
         Cursor cursorEvents = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + DATE_COL + ", " + TIME_COL, null);
         ArrayList<EventModel> eventModelArrayList = new ArrayList<>();
         SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -73,7 +92,11 @@ public class DBHandler extends SQLiteOpenHelper {
                         cursorEvents.getString(2),
                         formattedDate,
                         cursorEvents.getString(4),
-                        cursorEvents.getInt(5) == 1));
+                        cursorEvents.getInt(5),
+                        cursorEvents.getInt(6),
+                        cursorEvents.getInt(7),
+                        cursorEvents.getInt(8) == 1));
+                Log.d("ShowDay", "position" + cursorEvents.getPosition() + " day : " + String.valueOf(cursorEvents.getInt(7)));
             } while (cursorEvents.moveToNext());
 
         }
@@ -81,7 +104,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return eventModelArrayList;
 
     }
-    public void updateEvent(String id, String eventName, String eventNote, String date, String time, boolean notification) {
+    public void updateEvent(String id, String eventName, String eventNote, String date, String time, int year, int month, int day, boolean notification) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -89,6 +112,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(NOTE_COL, eventNote);
         values.put(DATE_COL, date);
         values.put(TIME_COL, time);
+        values.put(YEAR_COL, year);
+        values.put(MONTH_COL, month);
+        values.put(DAY_COL, day);
         values.put(NOTIFICATION_COL, notification ? 1 : 0);
         db.update(TABLE_NAME, values, "id=?", new String[]{id});
         db.close();
