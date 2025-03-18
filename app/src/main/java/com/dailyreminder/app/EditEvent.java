@@ -127,15 +127,20 @@ public class EditEvent extends AppCompatActivity {
         String eventNote = eventNoteEdt.getText().toString();
         String eventDate = dateButton.getText().toString();
         String eventTime = timeButton.getText().toString();
+        String[] dateInfo = eventDate.split("/");
+        int month = Integer.parseInt(dateInfo[0]);
+        int day = Integer.parseInt(dateInfo[1]);
+        int year = Integer.parseInt(dateInfo[2]);
+
         boolean eventNotification = eventNotificationSc.isChecked();
         String formattedDate = dbFormat.format(Objects.requireNonNull(readerFormat.parse(eventDate)));
         String formattedTime = timeFormat.format(Objects.requireNonNull(timeFormat.parse(eventTime)));
 
         if (getIntent().getStringExtra("event_id") != null) {
-            dbHandler.updateEvent(eventId, eventName, eventNote, formattedDate, formattedTime, eventNotification);
+            dbHandler.updateEvent(eventId, eventName, eventNote, formattedDate, formattedTime, year, month, day, eventNotification);
             Toast.makeText(this, "Event has been updated.", Toast.LENGTH_SHORT).show();
         } else {
-            dbHandler.addNewEvent(eventName, eventNote, formattedDate, formattedTime, eventNotification);
+            dbHandler.addNewEvent(eventName, eventNote, formattedDate, formattedTime, year, month, day, eventNotification);
             Toast.makeText(this, "Event has been added.", Toast.LENGTH_SHORT).show();
         }
 
