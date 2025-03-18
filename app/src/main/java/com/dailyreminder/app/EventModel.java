@@ -10,7 +10,7 @@ public class EventModel {
     private final boolean notification;
 
 
-    public EventModel(int id, String eventName, String eventNote, String date, String time, boolean notification) {
+    public EventModel(int id, String eventName, String eventNote, String date, String time, int year, int month, int day, boolean notification) {
         this.id = id;
         this.notification = notification;
         this.date = date;
