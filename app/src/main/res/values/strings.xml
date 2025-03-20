@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Daily Reminder</string>
+    <string name="event">Event</string>
+    <string name="note">Note</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="year_format">MM/DD/YYYY</string>
+    <string name="time_format">HH:MM</string>
+    <string name="name">Name</string>
+    <string name="notification">Notification</string>
+    <string name="save">Save</string>
+    <string name="activity_recycler_content">RecyclerView to insert each row of event</string>
+    <string name="addEventButton_content">Button to add an event</string>
 </resources>

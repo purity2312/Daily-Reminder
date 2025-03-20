@@ -11,10 +11,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "eventdb";
-    private static final int DB_VERSION = 8;
+    private static final int DB_VERSION = 11;
     private static final String TABLE_NAME = "myevents";
     private static final String ID_COL = "id";
     private static final String NAME_COL = "name";
@@ -66,12 +67,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public ArrayList<EventModel> readEvents() {
         Calendar cal = Calendar.getInstance();
+        SQLiteDatabase db = this.getReadableDatabase();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        //Cursor cursorEvents = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + DAY_COL + " = " + day + " ORDER BY " + DATE_COL + ", " + TIME_COL, null);
 
         Cursor cursorEvents = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + DATE_COL + ", " + TIME_COL, null);
         ArrayList<EventModel> eventModelArrayList = new ArrayList<>();
@@ -83,7 +82,7 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 date = cursorEvents.getString(3);
                 try {
-                    formattedDate = readerFormat.format(dbFormat.parse(date));
+                    formattedDate = readerFormat.format(Objects.requireNonNull(dbFormat.parse(date)));
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }

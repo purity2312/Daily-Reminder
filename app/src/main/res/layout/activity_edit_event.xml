@@ -12,116 +12,120 @@
         android:id="@+id/eventLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="64dp"
-        android:text="Event"
+        android:layout_marginEnd="24dp"
+        android:text="@string/event"
         android:textColor="@color/black"
         android:textSize="24sp"
+
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/noteLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="64dp"
-        android:text="Note"
+        android:layout_marginEnd="24dp"
+        android:text="@string/note"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editNote"
         app:layout_constraintTop_toBottomOf="@+id/eventLabel" />
 
     <TextView
         android:id="@+id/dateLable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="64dp"
-        android:text="Date"
+        android:layout_marginEnd="24dp"
+        android:text="@string/date"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/datePickerButton"
         app:layout_constraintTop_toBottomOf="@+id/noteLabel" />
 
     <TextView
         android:id="@+id/timeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="64dp"
-        android:text="Time"
+        android:layout_marginEnd="24dp"
+        android:text="@string/time"
         android:textColor="@color/black"
         android:textSize="24sp"
+
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/timePickerButton"
         app:layout_constraintTop_toBottomOf="@+id/dateLable" />
 
     <Button
         android:id="@+id/datePickerButton"
-        android:layout_width="200dp"
+        android:layout_width="208dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
         android:layout_marginTop="48dp"
         android:backgroundTint="@color/design_default_color_background"
         android:onClick="openDatePicker"
-        android:text="MM/DD/YYYY"
+        android:text="@string/year_format"
         android:textColor="@color/black"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editNote" />
 
     <Button
         android:id="@+id/timePickerButton"
-        android:layout_width="150dp"
+        android:layout_width="208dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
         android:layout_marginTop="48dp"
         android:backgroundTint="@color/design_default_color_background"
         android:onClick="openTimePicker"
-        android:text="HH:MM"
+        android:text="@string/time_format"
         android:textColor="@color/black"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
 
     <EditText
         android:id="@+id/editName"
-        android:layout_width="wrap_content"
+        android:layout_width="208dp"
         android:layout_height="56dp"
-        android:layout_marginStart="132dp"
         android:layout_marginTop="48dp"
         android:ems="10"
-        android:hint="Name"
+        android:hint="@string/name"
         android:inputType="text"
+        android:autofillHints="@string/name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editNote"
-        android:layout_width="wrap_content"
+        android:layout_width="208dp"
         android:layout_height="50dp"
-        android:layout_marginStart="132dp"
         android:layout_marginTop="48dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Note"
+        android:hint="@string/note"
         android:inputType="textMultiLine"
+        android:autofillHints="@string/note"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editName" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/editNotification"
-        android:layout_width="wrap_content"
+        android:layout_width="208dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
         android:layout_marginTop="48dp"
-        android:text="Notification"
+        android:text="@string/notification"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timePickerButton" />
 
@@ -132,8 +136,8 @@
         android:layout_marginTop="48dp"
         android:layout_marginBottom="48dp"
         android:onClick="saveEvent"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/save"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editNotification" />

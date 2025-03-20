@@ -89,25 +89,26 @@ public class Event_RecyclerViewAdapter extends RecyclerView.Adapter<Event_Recycl
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             int itemId = item.getItemId();
-            DBHandler db = new DBHandler(context);
-            EventModel event = eventModels.get(getAdapterPosition());
-            if (itemId == R.id.action_popup_edit){
-                // Create an Intent to open the EditEventActivity
-                Intent intent = new Intent(context, EditEvent.class);
-                intent.putExtra("event_id", String.valueOf(event.getId()));
-                intent.putExtra("event_name", event.getEventName());
-                intent.putExtra("event_note", event.getEventNote());
-                intent.putExtra("event_date", event.getDate());
-                intent.putExtra("event_time", event.getTime());
-                intent.putExtra("event_notification", event.isNotification());
-                context.startActivity(intent);
-                return true;
-            } else if (itemId == R.id.action_popup_delete) {
-                db.deleteEvent(String.valueOf(event.getId()));
-                Intent intent = new Intent(context, MainActivity.class);
-                context.startActivity(intent);
-                return true;
+            try (DBHandler db = new DBHandler(context)) {
+                EventModel event = eventModels.get(getAdapterPosition());
+                if (itemId == R.id.action_popup_edit) {
+                    // Create an Intent to open the EditEventActivity
+                    Intent intent = new Intent(context, EditEvent.class);
+                    intent.putExtra("event_id", String.valueOf(event.getId()));
+                    intent.putExtra("event_name", event.getEventName());
+                    intent.putExtra("event_note", event.getEventNote());
+                    intent.putExtra("event_date", event.getDate());
+                    intent.putExtra("event_time", event.getTime());
+                    intent.putExtra("event_notification", event.isNotification());
+                    context.startActivity(intent);
+                    return true;
+                } else if (itemId == R.id.action_popup_delete) {
+                    db.deleteEvent(String.valueOf(event.getId()));
+                    Intent intent = new Intent(context, MainActivity.class);
+                    context.startActivity(intent);
+                    return true;
 
+                }
             }
 
             return false;

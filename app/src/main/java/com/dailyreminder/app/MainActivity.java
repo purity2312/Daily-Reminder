@@ -2,6 +2,7 @@ package com.dailyreminder.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         Event_RecyclerViewAdapter adapter = new Event_RecyclerViewAdapter(this, db.readEvents());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     public void addEvent(View v){
