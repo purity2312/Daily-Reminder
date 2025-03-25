@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class Event_RecyclerViewAdapter extends RecyclerView.Adapter<Event_Recycl
         holder.tvNote.setText(eventModels.get(position).getEventNote());
         holder.tvDate.setText(eventModels.get(position).getDate());
         holder.tvTime.setText(eventModels.get(position).getTime());
-        holder.scNotification.setChecked(eventModels.get(position).isNotification());
         holder.tvId.setText(String.valueOf(eventModels.get(position).getId()));
     }
 
@@ -52,7 +50,6 @@ public class Event_RecyclerViewAdapter extends RecyclerView.Adapter<Event_Recycl
     }
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
         TextView tvName, tvNote, tvDate, tvTime, tvId;
-        SwitchCompat scNotification;
         ImageButton ibMenu;
         Context context;
         ArrayList<EventModel> eventModels;
@@ -66,7 +63,6 @@ public class Event_RecyclerViewAdapter extends RecyclerView.Adapter<Event_Recycl
             tvNote = itemView.findViewById(R.id.noteView);
             tvDate = itemView.findViewById(R.id.dateView);
             tvTime = itemView.findViewById(R.id.timeView);
-            scNotification = itemView.findViewById(R.id.notificationSwitch);
             tvId = itemView.findViewById(R.id.idView);
             ibMenu = itemView.findViewById(R.id.menuButton);
             ibMenu.setOnClickListener(this);
@@ -99,7 +95,6 @@ public class Event_RecyclerViewAdapter extends RecyclerView.Adapter<Event_Recycl
                     intent.putExtra("event_note", event.getEventNote());
                     intent.putExtra("event_date", event.getDate());
                     intent.putExtra("event_time", event.getTime());
-                    intent.putExtra("event_notification", event.isNotification());
                     context.startActivity(intent);
                     return true;
                 } else if (itemId == R.id.action_popup_delete) {

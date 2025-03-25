@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,7 +22,6 @@ public class EditEvent extends AppCompatActivity {
 
     private EditText eventNameEdt, eventNoteEdt;
     private Button dateButton, timeButton;
-    private SwitchCompat eventNotificationSc;
     private DBHandler dbHandler;
     private DatePickerDialog datePickerDialog;
     private String eventId;
@@ -47,7 +43,6 @@ public class EditEvent extends AppCompatActivity {
         eventNoteEdt = findViewById(R.id.editNote);
         dateButton = findViewById(R.id.datePickerButton);
         timeButton = findViewById(R.id.timePickerButton);
-        eventNotificationSc = findViewById(R.id.editNotification);
         dateButton.setText(getTodaysDate());
         timeButton.setText(getCurrentTime());
 
@@ -57,7 +52,6 @@ public class EditEvent extends AppCompatActivity {
             eventNoteEdt.setText(getIntent().getStringExtra("event_note"));
             dateButton.setText(getIntent().getStringExtra("event_date"));
             timeButton.setText(getIntent().getStringExtra("event_time"));
-            eventNotificationSc.setChecked(getIntent().getBooleanExtra("event_notification", false));
             setTitle("Update Event");
         } else {
             setTitle("Add Event");
@@ -73,12 +67,9 @@ public class EditEvent extends AppCompatActivity {
     }
 
     private void initTimePicker() {
-        TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hour, int minute) {
-                String time = hour + ":" + minute;
-                timeButton.setText(time);
-            }
+        TimePickerDialog.OnTimeSetListener timeSetListener = (view, hour, minute) -> {
+            String time = hour + ":" + minute;
+            timeButton.setText(time);
         };
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -96,13 +87,10 @@ public class EditEvent extends AppCompatActivity {
     }
 
     private void initDatePicker() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                month = month + 1;
-                String date = month + "/" + day + "/" + year;
-                dateButton.setText(date);
-            }
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, day) -> {
+            month = month + 1;
+            String date = month + "/" + day + "/" + year;
+            dateButton.setText(date);
         };
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -132,15 +120,14 @@ public class EditEvent extends AppCompatActivity {
         int day = Integer.parseInt(dateInfo[1]);
         int year = Integer.parseInt(dateInfo[2]);
 
-        boolean eventNotification = eventNotificationSc.isChecked();
         String formattedDate = dbFormat.format(Objects.requireNonNull(readerFormat.parse(eventDate)));
         String formattedTime = timeFormat.format(Objects.requireNonNull(timeFormat.parse(eventTime)));
 
         if (getIntent().getStringExtra("event_id") != null) {
-            dbHandler.updateEvent(eventId, eventName, eventNote, formattedDate, formattedTime, year, month, day, eventNotification);
+            dbHandler.updateEvent(eventId, eventName, eventNote, formattedDate, formattedTime, year, month, day);
             Toast.makeText(this, "Event has been updated.", Toast.LENGTH_SHORT).show();
         } else {
-            dbHandler.addNewEvent(eventName, eventNote, formattedDate, formattedTime, year, month, day, eventNotification);
+            dbHandler.addNewEvent(eventName, eventNote, formattedDate, formattedTime, year, month, day);
             Toast.makeText(this, "Event has been added.", Toast.LENGTH_SHORT).show();
         }
 
