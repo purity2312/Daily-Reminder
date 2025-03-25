@@ -11,4 +11,8 @@
     <string name="save">Save</string>
     <string name="activity_recycler_content">RecyclerView to insert each row of event</string>
     <string name="addEventButton_content">Button to add an event</string>
+    <string name="image_of_calendar">image of calendar</string>
+    <string name="image_of_clock">image of clock</string>
+    <string name="id">id</string>
+    <string name="menu">menu</string>
 </resources>

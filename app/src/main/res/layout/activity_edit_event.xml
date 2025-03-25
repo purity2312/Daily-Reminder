@@ -95,10 +95,10 @@
         android:layout_width="208dp"
         android:layout_height="56dp"
         android:layout_marginTop="48dp"
+        android:autofillHints="@string/name"
         android:ems="10"
         android:hint="@string/name"
         android:inputType="text"
-        android:autofillHints="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -108,38 +108,25 @@
         android:layout_width="208dp"
         android:layout_height="50dp"
         android:layout_marginTop="48dp"
+        android:autofillHints="@string/note"
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/note"
         android:inputType="textMultiLine"
-        android:autofillHints="@string/note"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editName" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/editNotification"
-        android:layout_width="208dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/notification"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePickerButton" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginTop="96dp"
         android:onClick="saveEvent"
-        android:text="@string/save"
 
+        android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editNotification" />
+        app:layout_constraintTop_toBottomOf="@+id/timePickerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

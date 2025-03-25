@@ -7,12 +7,10 @@ public class EventModel {
     private final String eventNote;
     private final String date;
     private final String time;
-    private final boolean notification;
 
 
-    public EventModel(int id, String eventName, String eventNote, String date, String time, int year, int month, int day, boolean notification) {
+    public EventModel(int id, String eventName, String eventNote, String date, String time, int year, int month, int day) {
         this.id = id;
-        this.notification = notification;
         this.date = date;
         this.eventNote = eventNote;
         this.eventName = eventName;
@@ -33,10 +31,6 @@ public class EventModel {
 
     public String getTime() {
         return time;
-    }
-
-    public boolean isNotification() {
-        return notification;
     }
 
     public int getId() {

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.Objects;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "eventdb";
-    private static final int DB_VERSION = 11;
+    private static final int DB_VERSION = 17;
     private static final String TABLE_NAME = "myevents";
     private static final String ID_COL = "id";
     private static final String NAME_COL = "name";
@@ -25,7 +23,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String YEAR_COL = "year";
     private static final String MONTH_COL = "month";
     private static final String DAY_COL = "day";
-    private static final String NOTIFICATION_COL = "notification";
+
 
 
     public DBHandler(Context context){
@@ -42,13 +40,12 @@ public class DBHandler extends SQLiteOpenHelper {
                 + TIME_COL + " TEXT,"
                 + YEAR_COL + " INTEGER,"
                 + MONTH_COL + " INTEGER,"
-                + DAY_COL + " INTEGER,"
-                + NOTIFICATION_COL + " INTEGER DEFAULT 0)";
+                + DAY_COL + " INTEGER)";
 
         db.execSQL(query);
     }
 
-    public void addNewEvent(String eventName, String eventNote, String date, String time, int year, int month, int day, boolean notification){
+    public void addNewEvent(String eventName, String eventNote, String date, String time, int year, int month, int day){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -59,8 +56,6 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(YEAR_COL, year);
         values.put(MONTH_COL, month);
         values.put(DAY_COL, day);
-        values.put(NOTIFICATION_COL, notification ? 1 : 0);
-
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
@@ -68,6 +63,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<EventModel> readEvents() {
         Calendar cal = Calendar.getInstance();
         SQLiteDatabase db = this.getReadableDatabase();
+        // work on this later to filter today/this month/ this year's tasks
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
@@ -93,9 +89,7 @@ public class DBHandler extends SQLiteOpenHelper {
                         cursorEvents.getString(4),
                         cursorEvents.getInt(5),
                         cursorEvents.getInt(6),
-                        cursorEvents.getInt(7),
-                        cursorEvents.getInt(8) == 1));
-                Log.d("ShowDay", "position" + cursorEvents.getPosition() + " day : " + String.valueOf(cursorEvents.getInt(7)));
+                        cursorEvents.getInt(7)));
             } while (cursorEvents.moveToNext());
 
         }
@@ -103,7 +97,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return eventModelArrayList;
 
     }
-    public void updateEvent(String id, String eventName, String eventNote, String date, String time, int year, int month, int day, boolean notification) {
+    public void updateEvent(String id, String eventName, String eventNote, String date, String time, int year, int month, int day) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -114,7 +108,6 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(YEAR_COL, year);
         values.put(MONTH_COL, month);
         values.put(DAY_COL, day);
-        values.put(NOTIFICATION_COL, notification ? 1 : 0);
         db.update(TABLE_NAME, values, "id=?", new String[]{id});
         db.close();
 
