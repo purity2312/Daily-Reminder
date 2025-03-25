@@ -18,43 +18,43 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class EditEvent extends AppCompatActivity {
+public class EditTask extends AppCompatActivity {
 
-    private EditText eventNameEdt, eventNoteEdt;
+    private EditText taskNameEdt, taskNoteEdt;
     private Button dateButton, timeButton;
     private DBHandler dbHandler;
     private DatePickerDialog datePickerDialog;
-    private String eventId;
+    private String taskId;
     private TimePickerDialog timePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_event);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.AddEvent), (v, insets) -> {
+        setContentView(R.layout.activity_edit_task);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.AddTask), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         initDatePicker();
         initTimePicker();
-        dbHandler = new DBHandler(EditEvent.this);
-        eventNameEdt = findViewById(R.id.editName);
-        eventNoteEdt = findViewById(R.id.editNote);
+        dbHandler = new DBHandler(EditTask.this);
+        taskNameEdt = findViewById(R.id.editName);
+        taskNoteEdt = findViewById(R.id.editNote);
         dateButton = findViewById(R.id.datePickerButton);
         timeButton = findViewById(R.id.timePickerButton);
         dateButton.setText(getTodaysDate());
         timeButton.setText(getCurrentTime());
 
-        if (getIntent().getStringExtra("event_id") != null) {
-            eventId = getIntent().getStringExtra("event_id");
-            eventNameEdt.setText(getIntent().getStringExtra("event_name"));
-            eventNoteEdt.setText(getIntent().getStringExtra("event_note"));
-            dateButton.setText(getIntent().getStringExtra("event_date"));
-            timeButton.setText(getIntent().getStringExtra("event_time"));
-            setTitle("Update Event");
+        if (getIntent().getStringExtra("task_id") != null) {
+            taskId = getIntent().getStringExtra("task_id");
+            taskNameEdt.setText(getIntent().getStringExtra("task_name"));
+            taskNoteEdt.setText(getIntent().getStringExtra("task_note"));
+            dateButton.setText(getIntent().getStringExtra("task_date"));
+            timeButton.setText(getIntent().getStringExtra("task_time"));
+            setTitle("Update Task");
         } else {
-            setTitle("Add Event");
+            setTitle("Add Task");
         }
 
     }
@@ -97,7 +97,6 @@ public class EditEvent extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
         datePickerDialog = new DatePickerDialog(this, dateSetListener, year, month, day);
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
     public void openDatePicker(View v) {
         datePickerDialog.show();
@@ -107,28 +106,28 @@ public class EditEvent extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    public void saveEvent(View v) throws ParseException {
+    public void saveTask(View v) throws ParseException {
         SimpleDateFormat readerFormat = new SimpleDateFormat("MM/dd/yyyy");
         SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy/MM/dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String eventName = eventNameEdt.getText().toString();
-        String eventNote = eventNoteEdt.getText().toString();
-        String eventDate = dateButton.getText().toString();
-        String eventTime = timeButton.getText().toString();
-        String[] dateInfo = eventDate.split("/");
+        String taskName = taskNameEdt.getText().toString();
+        String taskNote = taskNoteEdt.getText().toString();
+        String taskDate = dateButton.getText().toString();
+        String taskTime = timeButton.getText().toString();
+        String[] dateInfo = taskDate.split("/");
         int month = Integer.parseInt(dateInfo[0]);
         int day = Integer.parseInt(dateInfo[1]);
         int year = Integer.parseInt(dateInfo[2]);
 
-        String formattedDate = dbFormat.format(Objects.requireNonNull(readerFormat.parse(eventDate)));
-        String formattedTime = timeFormat.format(Objects.requireNonNull(timeFormat.parse(eventTime)));
+        String formattedDate = dbFormat.format(Objects.requireNonNull(readerFormat.parse(taskDate)));
+        String formattedTime = timeFormat.format(Objects.requireNonNull(timeFormat.parse(taskTime)));
 
-        if (getIntent().getStringExtra("event_id") != null) {
-            dbHandler.updateEvent(eventId, eventName, eventNote, formattedDate, formattedTime, year, month, day);
-            Toast.makeText(this, "Event has been updated.", Toast.LENGTH_SHORT).show();
+        if (getIntent().getStringExtra("task_id") != null) {
+            dbHandler.updateTask(taskId, taskName, taskNote, formattedDate, formattedTime, year, month, day);
+            Toast.makeText(this, "Task has been updated.", Toast.LENGTH_SHORT).show();
         } else {
-            dbHandler.addNewEvent(eventName, eventNote, formattedDate, formattedTime, year, month, day);
-            Toast.makeText(this, "Event has been added.", Toast.LENGTH_SHORT).show();
+            dbHandler.addNewTask(taskName, taskNote, formattedDate, formattedTime, year, month, day);
+            Toast.makeText(this, "Task has been added.", Toast.LENGTH_SHORT).show();
         }
 
 

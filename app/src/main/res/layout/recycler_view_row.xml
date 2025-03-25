@@ -22,24 +22,24 @@
             android:layout_height="165dp">
 
             <ImageView
-                android:contentDescription="@string/image_of_calendar"
                 android:id="@+id/calendarIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
+                android:contentDescription="@string/image_of_calendar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:drawable/ic_menu_agenda" />
 
             <ImageView
-                android:contentDescription="@string/image_of_clock"
                 android:id="@+id/clockIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-
                 android:layout_marginStart="24dp"
+
                 android:layout_marginBottom="56dp"
+                android:contentDescription="@string/image_of_clock"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@android:drawable/ic_menu_recent_history" />
@@ -111,6 +111,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_menu_more_vert" />
+
+            <CheckBox
+                android:id="@+id/checkComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:onClick="markComplete"
+                android:text="@string/complete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

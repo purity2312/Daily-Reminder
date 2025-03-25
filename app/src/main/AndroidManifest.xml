@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DailyReminder"
         tools:targetApi="31">
-        <activity android:name=".EditEvent" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".EditTask" android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

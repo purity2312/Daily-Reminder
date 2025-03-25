@@ -2,7 +2,7 @@ package com.dailyreminder.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,16 +26,25 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         RecyclerView recyclerView = findViewById(R.id.mRecyclerView);
-        Event_RecyclerViewAdapter adapter = new Event_RecyclerViewAdapter(this, db.readEvents());
+        Task_RecyclerViewAdapter adapter = new Task_RecyclerViewAdapter(this, db.readTasks());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
-    public void addEvent(View v){
-        Intent i = new Intent(this, EditEvent.class);
+    public void addTask(View v){
+        Intent i = new Intent(this, EditTask.class);
         startActivity(i);
 
+    }
+
+    public void markComplete(View v) {
+        CheckBox cb = (CheckBox) v;
+        if (cb.isChecked()){
+
+        } else {
+
+        }
     }
 
 

@@ -12,9 +12,9 @@ import java.util.Calendar;
 import java.util.Objects;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final String DB_NAME = "eventdb";
-    private static final int DB_VERSION = 17;
-    private static final String TABLE_NAME = "myevents";
+    private static final String DB_NAME = "taskdb";
+    private static final int DB_VERSION = 18;
+    private static final String TABLE_NAME = "mytasks";
     private static final String ID_COL = "id";
     private static final String NAME_COL = "name";
     private static final String NOTE_COL = "note";
@@ -23,8 +23,6 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String YEAR_COL = "year";
     private static final String MONTH_COL = "month";
     private static final String DAY_COL = "day";
-
-
 
     public DBHandler(Context context){
         super(context, DB_NAME, null, DB_VERSION);
@@ -45,12 +43,12 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-    public void addNewEvent(String eventName, String eventNote, String date, String time, int year, int month, int day){
+    public void addNewTask(String taskName, String taskNote, String date, String time, int year, int month, int day){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(NAME_COL, eventName);
-        values.put(NOTE_COL, eventNote);
+        values.put(NAME_COL, taskName);
+        values.put(NOTE_COL, taskNote);
         values.put(DATE_COL, date);
         values.put(TIME_COL, time);
         values.put(YEAR_COL, year);
@@ -60,49 +58,52 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ArrayList<EventModel> readEvents() {
+    public ArrayList<TaskModel> readTasks() {
         Calendar cal = Calendar.getInstance();
         SQLiteDatabase db = this.getReadableDatabase();
+
         // work on this later to filter today/this month/ this year's tasks
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        Cursor cursorEvents = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + DATE_COL + ", " + TIME_COL, null);
-        ArrayList<EventModel> eventModelArrayList = new ArrayList<>();
+        Cursor cursorTasks = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + DATE_COL + ", " + TIME_COL, null);
+        ArrayList<TaskModel> taskModelArrayList = new ArrayList<>();
+
         SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy/MM/dd");
         SimpleDateFormat readerFormat = new SimpleDateFormat("MM/dd/yyyy");
         String formattedDate;
         String date;
-        if (cursorEvents.moveToFirst()) {
+
+        if (cursorTasks.moveToFirst()) {
             do {
-                date = cursorEvents.getString(3);
+                date = cursorTasks.getString(3);
                 try {
                     formattedDate = readerFormat.format(Objects.requireNonNull(dbFormat.parse(date)));
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
-                eventModelArrayList.add(new EventModel(cursorEvents.getInt(0),
-                        cursorEvents.getString(1),
-                        cursorEvents.getString(2),
+                taskModelArrayList.add(new TaskModel(cursorTasks.getInt(0),
+                        cursorTasks.getString(1),
+                        cursorTasks.getString(2),
                         formattedDate,
-                        cursorEvents.getString(4),
-                        cursorEvents.getInt(5),
-                        cursorEvents.getInt(6),
-                        cursorEvents.getInt(7)));
-            } while (cursorEvents.moveToNext());
+                        cursorTasks.getString(4),
+                        cursorTasks.getInt(5),
+                        cursorTasks.getInt(6),
+                        cursorTasks.getInt(7)));
+            } while (cursorTasks.moveToNext());
 
         }
-        cursorEvents.close();
-        return eventModelArrayList;
+        cursorTasks.close();
+        return taskModelArrayList;
 
     }
-    public void updateEvent(String id, String eventName, String eventNote, String date, String time, int year, int month, int day) {
+    public void updateTask(String id, String taskName, String taskNote, String date, String time, int year, int month, int day) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(NAME_COL, eventName);
-        values.put(NOTE_COL, eventNote);
+        values.put(NAME_COL, taskName);
+        values.put(NOTE_COL, taskNote);
         values.put(DATE_COL, date);
         values.put(TIME_COL, time);
         values.put(YEAR_COL, year);
@@ -113,7 +114,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void deleteEvent(String id) {
+    public void deleteTask(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, "id=?", new String[]{id});
         db.close();

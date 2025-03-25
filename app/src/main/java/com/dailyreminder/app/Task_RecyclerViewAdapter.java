@@ -15,49 +15,49 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class Event_RecyclerViewAdapter extends RecyclerView.Adapter<Event_RecyclerViewAdapter.MyViewHolder> {
+public class Task_RecyclerViewAdapter extends RecyclerView.Adapter<Task_RecyclerViewAdapter.MyViewHolder> {
 
     private final Context context;
-    private final ArrayList<EventModel> eventModels;
+    private final ArrayList<TaskModel> taskModels;
 
-    public Event_RecyclerViewAdapter(Context context, ArrayList<EventModel> eventModels){
+    public Task_RecyclerViewAdapter(Context context, ArrayList<TaskModel> taskModels){
         this.context = context;
-        this.eventModels = eventModels;
+        this.taskModels = taskModels;
     }
     @NonNull
     @Override
-    public Event_RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Task_RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflate the layout
         LayoutInflater inflator = LayoutInflater.from(context);
         View view = inflator.inflate(R.layout.recycler_view_row, parent, false);
-        return new Event_RecyclerViewAdapter.MyViewHolder(view, context, eventModels);
+        return new Task_RecyclerViewAdapter.MyViewHolder(view, context, taskModels);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Event_RecyclerViewAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Task_RecyclerViewAdapter.MyViewHolder holder, int position) {
         // set values to each of the recycler view row
-        holder.tvName.setText(eventModels.get(position).getEventName());
-        holder.tvNote.setText(eventModels.get(position).getEventNote());
-        holder.tvDate.setText(eventModels.get(position).getDate());
-        holder.tvTime.setText(eventModels.get(position).getTime());
-        holder.tvId.setText(String.valueOf(eventModels.get(position).getId()));
+        holder.tvName.setText(taskModels.get(position).getTaskName());
+        holder.tvNote.setText(taskModels.get(position).getTaskNote());
+        holder.tvDate.setText(taskModels.get(position).getDate());
+        holder.tvTime.setText(taskModels.get(position).getTime());
+        holder.tvId.setText(String.valueOf(taskModels.get(position).getId()));
     }
 
     @Override
     public int getItemCount() {
         // return number of items to be displayed
-        return eventModels.size();
+        return taskModels.size();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
         TextView tvName, tvNote, tvDate, tvTime, tvId;
         ImageButton ibMenu;
         Context context;
-        ArrayList<EventModel> eventModels;
+        ArrayList<TaskModel> taskModels;
 
-        public MyViewHolder(@NonNull View itemView, Context context, ArrayList<EventModel> eventModels) {
+        public MyViewHolder(@NonNull View itemView, Context context, ArrayList<TaskModel> taskModels) {
             super(itemView);
             this.context = context;
-            this.eventModels = eventModels;
+            this.taskModels = taskModels;
 
             tvName = itemView.findViewById(R.id.nameView);
             tvNote = itemView.findViewById(R.id.noteView);
@@ -86,19 +86,19 @@ public class Event_RecyclerViewAdapter extends RecyclerView.Adapter<Event_Recycl
         public boolean onMenuItemClick(MenuItem item) {
             int itemId = item.getItemId();
             try (DBHandler db = new DBHandler(context)) {
-                EventModel event = eventModels.get(getAdapterPosition());
+                TaskModel task = taskModels.get(getAdapterPosition());
                 if (itemId == R.id.action_popup_edit) {
-                    // Create an Intent to open the EditEventActivity
-                    Intent intent = new Intent(context, EditEvent.class);
-                    intent.putExtra("event_id", String.valueOf(event.getId()));
-                    intent.putExtra("event_name", event.getEventName());
-                    intent.putExtra("event_note", event.getEventNote());
-                    intent.putExtra("event_date", event.getDate());
-                    intent.putExtra("event_time", event.getTime());
+                    // Create an Intent to open the EditTaskActivity
+                    Intent intent = new Intent(context, EditTask.class);
+                    intent.putExtra("task_id", String.valueOf(task.getId()));
+                    intent.putExtra("task_name", task.getTaskName());
+                    intent.putExtra("task_note", task.getTaskNote());
+                    intent.putExtra("task_date", task.getDate());
+                    intent.putExtra("task_time", task.getTime());
                     context.startActivity(intent);
                     return true;
                 } else if (itemId == R.id.action_popup_delete) {
-                    db.deleteEvent(String.valueOf(event.getId()));
+                    db.deleteTask(String.valueOf(task.getId()));
                     Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                     return true;
