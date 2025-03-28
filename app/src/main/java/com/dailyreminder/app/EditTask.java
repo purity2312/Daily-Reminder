@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,8 @@ public class EditTask extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private String taskId;
     private TimePickerDialog timePickerDialog;
+    private CheckBox completeBox;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class EditTask extends AppCompatActivity {
         timeButton = findViewById(R.id.timePickerButton);
         dateButton.setText(getTodaysDate());
         timeButton.setText(getCurrentTime());
+        completeBox = findViewById(R.id.editComplete);
 
         if (getIntent().getStringExtra("task_id") != null) {
             taskId = getIntent().getStringExtra("task_id");
@@ -52,11 +56,20 @@ public class EditTask extends AppCompatActivity {
             taskNoteEdt.setText(getIntent().getStringExtra("task_note"));
             dateButton.setText(getIntent().getStringExtra("task_date"));
             timeButton.setText(getIntent().getStringExtra("task_time"));
+            completeBox.setChecked(getIntent().getBooleanExtra("task_complete", false));
             setTitle("Update Task");
         } else {
             setTitle("Add Task");
         }
 
+    }
+    public void markComplete(View v) {
+        CheckBox cb = (CheckBox) v;
+        if (cb.isChecked()){
+
+        } else {
+
+        }
     }
 
     private String getCurrentTime() {
@@ -115,6 +128,7 @@ public class EditTask extends AppCompatActivity {
         String taskDate = dateButton.getText().toString();
         String taskTime = timeButton.getText().toString();
         String[] dateInfo = taskDate.split("/");
+        boolean complete = completeBox.isChecked();
         int month = Integer.parseInt(dateInfo[0]);
         int day = Integer.parseInt(dateInfo[1]);
         int year = Integer.parseInt(dateInfo[2]);
@@ -123,10 +137,10 @@ public class EditTask extends AppCompatActivity {
         String formattedTime = timeFormat.format(Objects.requireNonNull(timeFormat.parse(taskTime)));
 
         if (getIntent().getStringExtra("task_id") != null) {
-            dbHandler.updateTask(taskId, taskName, taskNote, formattedDate, formattedTime, year, month, day);
+            dbHandler.updateTask(taskId, taskName, taskNote, formattedDate, formattedTime, year, month, day, complete);
             Toast.makeText(this, "Task has been updated.", Toast.LENGTH_SHORT).show();
         } else {
-            dbHandler.addNewTask(taskName, taskNote, formattedDate, formattedTime, year, month, day);
+            dbHandler.addNewTask(taskName, taskNote, formattedDate, formattedTime, year, month, day, complete);
             Toast.makeText(this, "Task has been added.", Toast.LENGTH_SHORT).show();
         }
 

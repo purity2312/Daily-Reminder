@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class Task_RecyclerViewAdapter extends RecyclerView.Adapter<Task_Recycler
         holder.tvDate.setText(taskModels.get(position).getDate());
         holder.tvTime.setText(taskModels.get(position).getTime());
         holder.tvId.setText(String.valueOf(taskModels.get(position).getId()));
+        holder.cbComplete.setChecked(taskModels.get(position).isComplete());
     }
 
     @Override
@@ -53,6 +55,7 @@ public class Task_RecyclerViewAdapter extends RecyclerView.Adapter<Task_Recycler
         ImageButton ibMenu;
         Context context;
         ArrayList<TaskModel> taskModels;
+        CheckBox cbComplete;
 
         public MyViewHolder(@NonNull View itemView, Context context, ArrayList<TaskModel> taskModels) {
             super(itemView);
@@ -64,6 +67,7 @@ public class Task_RecyclerViewAdapter extends RecyclerView.Adapter<Task_Recycler
             tvDate = itemView.findViewById(R.id.dateView);
             tvTime = itemView.findViewById(R.id.timeView);
             tvId = itemView.findViewById(R.id.idView);
+            cbComplete = itemView.findViewById(R.id.checkComplete);
             ibMenu = itemView.findViewById(R.id.menuButton);
             ibMenu.setOnClickListener(this);
 
@@ -95,6 +99,7 @@ public class Task_RecyclerViewAdapter extends RecyclerView.Adapter<Task_Recycler
                     intent.putExtra("task_note", task.getTaskNote());
                     intent.putExtra("task_date", task.getDate());
                     intent.putExtra("task_time", task.getTime());
+                    intent.putExtra("task_complete", task.isComplete());
                     context.startActivity(intent);
                     return true;
                 } else if (itemId == R.id.action_popup_delete) {

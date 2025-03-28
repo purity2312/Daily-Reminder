@@ -8,12 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "taskdb";
-    private static final int DB_VERSION = 18;
+    private static final int DB_VERSION = 19;
     private static final String TABLE_NAME = "mytasks";
     private static final String ID_COL = "id";
     private static final String NAME_COL = "name";
@@ -23,6 +22,8 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String YEAR_COL = "year";
     private static final String MONTH_COL = "month";
     private static final String DAY_COL = "day";
+    private static final String COMPLETE_COL = "complete";
+
 
     public DBHandler(Context context){
         super(context, DB_NAME, null, DB_VERSION);
@@ -38,12 +39,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 + TIME_COL + " TEXT,"
                 + YEAR_COL + " INTEGER,"
                 + MONTH_COL + " INTEGER,"
-                + DAY_COL + " INTEGER)";
+                + DAY_COL + " INTEGER,"
+                + COMPLETE_COL + " INTEGER DEFAULT 0)";
 
         db.execSQL(query);
     }
 
-    public void addNewTask(String taskName, String taskNote, String date, String time, int year, int month, int day){
+    public void addNewTask(String taskName, String taskNote, String date, String time, int year, int month, int day, boolean complete){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -54,19 +56,13 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(YEAR_COL, year);
         values.put(MONTH_COL, month);
         values.put(DAY_COL, day);
+        values.put(COMPLETE_COL, complete ? 1 : 0);
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
 
     public ArrayList<TaskModel> readTasks() {
-        Calendar cal = Calendar.getInstance();
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // work on this later to filter today/this month/ this year's tasks
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
         Cursor cursorTasks = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + DATE_COL + ", " + TIME_COL, null);
         ArrayList<TaskModel> taskModelArrayList = new ArrayList<>();
 
@@ -90,7 +86,8 @@ public class DBHandler extends SQLiteOpenHelper {
                         cursorTasks.getString(4),
                         cursorTasks.getInt(5),
                         cursorTasks.getInt(6),
-                        cursorTasks.getInt(7)));
+                        cursorTasks.getInt(7),
+                        cursorTasks.getInt(8) == 1));
             } while (cursorTasks.moveToNext());
 
         }
@@ -98,7 +95,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return taskModelArrayList;
 
     }
-    public void updateTask(String id, String taskName, String taskNote, String date, String time, int year, int month, int day) {
+    public void updateTask(String id, String taskName, String taskNote, String date, String time, int year, int month, int day, boolean complete) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -109,6 +106,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(YEAR_COL, year);
         values.put(MONTH_COL, month);
         values.put(DAY_COL, day);
+        values.put(COMPLETE_COL, complete ? 1: 0);
         db.update(TABLE_NAME, values, "id=?", new String[]{id});
         db.close();
 
